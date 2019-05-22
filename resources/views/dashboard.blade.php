@@ -23,21 +23,21 @@ Início
         <!-- small box -->
         <div class="small-box bg-grey-ufop">
           <div class="inner">
-            <h3>4</h3>
+          <h3>{{ $status['sumTask']}}</h3>
 
             <p>Total de Chamados</p>
           </div>
           <div class="icon">
             <i class="ion ion-bag"></i>
           </div>
-          <a href="#" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
+        <a href="{{ route('userTasks') }}" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <div class="col-lg-4 col-xs-6">
         <!-- small box -->
         <div class="small-box bg-blue-ufop">
           <div class="inner">
-            <h3>0</h3>
+            <h3>{{$status['openTask']}}</h3>
 
             <p>Em aberto</p>
           </div>
@@ -51,7 +51,7 @@ Início
         <!-- small box -->
         <div class="small-box bg-blue-2-ufop">
           <div class="inner">
-            <h3>0</h3>
+            <h3>{{$status['waitAttendanceTask']}}</h3>
 
             <p>Aguardando atendimento</p>
           </div>
@@ -67,7 +67,7 @@ Início
         <!-- small box -->
         <div class="small-box bg-yellow-ufop">
           <div class="inner">
-            <h3>0</h3>
+            <h3>{{$status['attendanceTask']}}</h3>
 
             <p>Em atendimento</p>
           </div>
@@ -82,7 +82,7 @@ Início
         <!-- small box -->
         <div class="small-box bg-red-ufop">
           <div class="inner">
-            <h3>0</h3>
+            <h3>{{$status['waitingTask']}}</h3>
 
             <p>Em Espera</p>
           </div>
@@ -97,7 +97,7 @@ Início
         <!-- small box -->
         <div class="small-box bg-green-ufop">
           <div class="inner">
-            <h3>4</h3>
+            <h3>{{$status['completedTask']}}</h3>
 
             <p>Concluídos</p>
           </div>

@@ -1,5 +1,5 @@
 @section('title')
-Novo  Chamado
+Novo Chamado
 @stop
 @extends('base')
 @section('content')
@@ -10,7 +10,7 @@ Novo  Chamado
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('/') }}"></i>Início</a></li>
-    <li><a href="/solicitacao">Solicitação</a></li>
+    <li><a href="/solicitacao">Meus Chamados</a></li>
     <li class="active">Novo</li>
   </ol>
 </section>
@@ -36,7 +36,8 @@ Novo  Chamado
         <div class="col-md-4">
           <div class="form-group">
             <label>Telefone</label>
-            <input name="phone" type="text" class="form-control" disabled="disabled" value="{{ Auth::user()->phone }}">
+            <input name="phone" data-mask="(00)000000000" type="text" class="form-control" disabled="disabled"
+              value="{{ Auth::user()->phone }}">
           </div>
         </div>
         <div class="col-md-4">
@@ -53,72 +54,70 @@ Novo  Chamado
     </div>
   </div>
   <form method="POST" action="{{ route('openTask') }}" method="post">
-      {{ csrf_field()}}
-  <div class="box box-default">
-    <div class="box-header with-border">
-      <h3 class="box-title">Formulário de abertura</h3>
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+    {{ csrf_field()}}
+    <div class="box box-default">
+      <div class="box-header with-border">
+        <h3 class="box-title">Formulário de abertura</h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
       </div>
-    </div>
-    <div class="box-body">
-      <div class="row">
-        <div class="col-md-4">
-              <div class="form-group">
-                <label>Patrimônio</label>
-                <input id="patrimonio" type="text" name="patrimony" class="form-control">
-              </div>
-            </div>
-              <div class="col-md-4">
-              <div class="form-group form-check align-form">
-                <input type="checkbox" class="form-check-input" id="checkPatrimonio">
-                <label class="form-check-label">Não possui patrimônio</label>
-              </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Patrimônio</label>
+              <input type="text" name="patrimony" id="patrimony" data-mask="000000" class="form-control" required>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Descrição</label>
-                <textarea name="description" class="form-control"
-                  placeholder="Escreva uma breve descrição do problema ocorrido." rows="3"></textarea>
-              </div>
+          <div class="col-md-4">
+            <div class="form-group form-check align-form">
+              <input type="checkbox" class="form-check-input" id="checkPatrimony">
+              <label class="form-check-label">Não possui patrimônio</label>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Local</label>
-                <select class="form-control" name="locale">
-                <option>Outro - Não listado</option>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Descrição</label>
+              <textarea name="description" class="form-control"
+                placeholder="Escreva uma breve descrição do problema ocorrido." rows="3" required></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Local</label>
+              <select class="form-control" name="locale">
                 @foreach($places as $place)
-                  <option> {{ $place->description }}</option>
-                  @endforeach
-                </select>
-              </div>
+                <option value="{{ $place->id }}"> {{ $place->description }}</option>
+                @endforeach
+              </select>
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Categoria</label>
-                <select class="form-control" name="category">
-                <option>Outro - Não listado</option>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Categoria</label>
+              <select class="form-control" name="category">
                 @foreach($categories as $category)
-                  <option> {{ $category->description }}</option>
-                  @endforeach
-                </select>
-              </div>
+                <option value="{{ $category->id }}"> {{ $category->description }}</option>
+                @endforeach
+              </select>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-8">
-              <div class="form-group">
-                <label>Observações</label>
-                <textarea name="notes" class="form-control"
-                  placeholder="Observações quanto ao problema ocorrido. (Exemplos: categoria ou local não listados, data limite para atendimento, links para auxílio, outros meios de contato (e-mail ou telefone alternativo), etc)" rows="3"></textarea>
-              </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <label>Observações</label>
+              <textarea name="notes" class="form-control" placeholder="Observações quanto ao problema ocorrido."
+                required rows="3"></textarea>
             </div>
           </div>
-          <button class="btn btn-danger"type="submit">Abrir chamado</button>
+        </div>
+        <button class="btn btn-danger" type="submit">Abrir chamado</button>
 </section>
 
 @stop

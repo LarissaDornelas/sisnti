@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,14 +31,27 @@ Route::get('/logout', function () {
 /**
  * Task routes
  */
-Route::get('/solicitacao', 'taskController@allTask')->name('allTask');
+Route::get('/solicitacao', 'TaskController@allTask')->name('userTasks');
 Route::get('/solicitacao/novo', 'TaskController@getOpenTask')->name('showOpenTask');
 Route::post('/solicitacao/novo', 'TaskController@postOpenTask')->name('openTask');
+Route::get('/solicitacao/{id}', 'TaskController@taskDetail')->name('taskDetail');
+
 
 
 
 
 Route::get('/dashboard','DashController@showDash')->name('dashboard');
+Route::get('/sobre', function (){
+   
+     return view('info');
+     
+})->name('showInfo');
 
+
+/**
+ * User routes
+ */
+
+ Route::get('/perfil', 'UserController@showProfile')->name('showProfile');
 
 

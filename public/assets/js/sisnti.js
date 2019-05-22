@@ -1,8 +1,8 @@
-document.getElementById('checkPatrimonio').onclick = function () {
-    if (document.getElementById('checkPatrimonio').checked) {
-        document.getElementById('patrimonio').disabled = true;
+document.getElementById('checkPatrimony').onclick = function () {
+    if (document.getElementById('checkPatrimony').checked) {
+        document.getElementById('patrimony').disabled = true;
     }
     else {
-        document.getElementById('patrimonio').disabled = false;
+        document.getElementById('patrimony').disabled = false;
     }
 }
