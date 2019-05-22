@@ -85,18 +85,18 @@ class TaskController extends Controller
        
             $taskData = $taskData[0];
 
-            if(!$taskData->client_id == auth()->user()->id)
+            if(!($taskData->client_id == auth()->user()->id))
             {
                 if(!$this->isAdmin())
                 {
                     $error = 'Acesso Negado';
 
-                    return view('task.taskDetail')->withErrors(['error'=> $error]);
+                    return view('task.taskDetail', ['error'=>$error]);
                 }
             }       
         
    
-        return view('task.taskDetail', ['taskData' => $taskData[0]]);
+        return view('task.taskDetail', ['taskData' => $taskData, 'error'=>null]);
     }
 
     public function isAdmin()

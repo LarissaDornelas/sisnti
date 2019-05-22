@@ -17,6 +17,7 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{ asset('assets/css/adminLTE/skins/skin-ufop.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/ufop.css') }}">
   @yield('morecss')
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

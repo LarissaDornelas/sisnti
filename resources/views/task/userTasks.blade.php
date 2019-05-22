@@ -49,10 +49,9 @@ Meus Chamados
 
                                 @foreach($userTasks as $userTask)
                                 <tr role="row" class="odd">
-                                    <td class="sorting_1">{{ date( 'd-m-Y H:i:s' , strtotime($userTask->openingDate)) }}
-                                    </td>
-                                    <td>{{ $userTask->description }}</td>
-                                    <td>{{ $userTask->note }}</td>
+                                    <td class="sorting_1">{{ date( 'd-m-Y H:i:s' , strtotime($userTask->openingDate)) }}</td>
+                                    <td><div class="b">{{ $userTask->description }}</div></td>
+                                    <td ><div class="b" >{{ $userTask->note }}</div></td>
                                     <td>{{ $userTask->taskLocal}}</td>
                                     <td>{{ $userTask->taskCategory}}</td>
                                     <td><small class= "label
