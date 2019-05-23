@@ -21,7 +21,7 @@ Detalhes do Chamado
   <ol class="breadcrumb">
     <li><a href="{{ route('/') }}"></i>Início</a></li>
     <li><a href="/solicitacao">Meus Chamados</a></li>
-    <li class="active">Novo</li>
+    <li class="active">Detalhes do Chamado</li>
   </ol>
 </section>
 
@@ -114,10 +114,10 @@ Detalhes do Chamado
                      @endif
                   </td>
                 </tr>
-                <tr>
+                {{-- <tr>
                   <th class="text-center" scope="col"><i class="fa fa-location-arrow margin-r-5"></th>
                   <td>{{$taskData->taskLocal}}</td>
-                </tr>
+                </tr> --}}
   
               </table>
             </div>

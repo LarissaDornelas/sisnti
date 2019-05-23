@@ -18,30 +18,31 @@ Perfil de Usuario
 <section class="content">
   <div class="box box-default">
     <div class="box-body">
-      <strong><i class="fa fa-user margin-r-5"></i> Nome Completo</strong>
-
-      <p class="text-muted">
-        {{$userData->name}}
-      </p>
-
-      <hr>
-
-      <strong><i class="fa fa-phone margin-r-5"></i> Telefone</strong>
-
-      <p class="text-muted">{{$userData->phone}}</p>
-
-      <hr>
-
-      <strong><i class="fa fa-envelope margin-r-5"></i> E-mail</strong>
-
-      <p class="text-muted">{{$userData->email}}</p>
-
-      <hr>
-
-      <strong><i class="fa fa-file-text margin-r-5"></i> Cpf</strong>
-
-      <p class="text-muted">{{$userData->username}}</p>
-    </div>
+        <div class="row">
+            <div class="col-md-12">
+              <table class="table table-hover table-striped table-bordered">
+                <tr>
+                  <th class="text-center" scope="col"><i class="fa fa-user margin-r-5"></i></th>
+                  <td>{{$userData->name}}</td>
+                </tr>
+                <tr>
+                  <th class="text-center" scope="col"><i class="fa fa-phone margin-r-5"></i></th>
+                  <td>{{$userData->phone}}</td>
+                </tr>
+                <tr>
+                  <th class="text-center" scope="col"><i class="fa fa-envelope margin-r-5"></i></th>
+                  <td>{{$userData->email}}</td>
+                </tr>
+                <tr>
+                  <th class="text-center" scope="col"><i class="fa fa-file-text margin-r-5"></th>
+                  <td>{{$userData->username}}</td>
+                </tr>
+  
+              </table>
+            </div>
+            
+          </div>
+      
     <div class="box-footer">
       <p class="font-weight-bold">Dados de usuário são importados da MinhaUFOP, para alteração acesse o <a
           href="https://zeppelin10.ufop.br/minhaUfop/desktop/login.xhtml">link</a></p>
