@@ -30,7 +30,7 @@ Início
           <div class="icon">
             <i class="ion ion-bag"></i>
           </div>
-        <a href="{{ route('userTasks') }}" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
+        <a href="{{ route('userTasks')}}" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <div class="col-lg-4 col-xs-6">
@@ -44,7 +44,7 @@ Início
           <div class="icon">
             <i class="ion ion-bag"></i>
           </div>
-          <a href="#" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('userTasksFilter', ['type' => "em-aberto"]) }}" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <div class="col-lg-4 col-xs-6">
@@ -58,7 +58,7 @@ Início
           <div class="icon">
             <i class="ion ion-bag"></i>
           </div>
-          <a href="#" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('userTasksFilter', ['type' => "aguardando-atendimento"]) }}" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       
@@ -74,7 +74,7 @@ Início
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
           </div>
-          <a href="#" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('userTasksFilter', ['type' => "em-atendimento"]) }}" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -89,7 +89,7 @@ Início
           <div class="icon">
             <i class="ion ion-person-add"></i>
           </div>
-          <a href="#" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('userTasksFilter', ['type' => "em-espera"])}}" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -104,7 +104,7 @@ Início
           <div class="icon">
             <i class="ion ion-pie-graph"></i>
           </div>
-          <a href="#" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('userTasksFilter', ['type' => "concluido"]) }}" class="small-box-footer">Ver detalhes <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->

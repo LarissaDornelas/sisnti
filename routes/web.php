@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 /*
  * Auth routes
  */
+
 Route::get('/', function () {
     return redirect('/login');
 })->name('/');
@@ -35,23 +36,25 @@ Route::get('/solicitacao', 'TaskController@allTask')->name('userTasks');
 Route::get('/solicitacao/novo', 'TaskController@getOpenTask')->name('showOpenTask');
 Route::post('/solicitacao/novo', 'TaskController@postOpenTask')->name('openTask');
 Route::get('/solicitacao/{id}', 'TaskController@taskDetail')->name('taskDetail');
+Route::get('/solicitacao/filter/{type}', 'TaskController@taskWithFilter')->name('userTasksFilter');
 
-
-
-
-
-Route::get('/dashboard','DashController@showDash')->name('dashboard');
-Route::get('/sobre', function (){
-   
-     return view('info');
-     
-})->name('showInfo');
-
+/*
+ * General routes
+ */
+Route::get('/dashboard', 'DashController@showDash')->name('dashboard');
+Route::get('/sobre', 'InfoController@showInfo')->name('showInfo');
 
 /**
  * User routes
  */
 
- Route::get('/perfil', 'UserController@showProfile')->name('showProfile');
+Route::get('/perfil', 'UserController@showProfile')->name('showProfile');
 
-
+/**
+ * Admin routes
+ */
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/general/{type}', 'TaskController@adminGeneralTask')->name('showAdminGeneral');
+    Route::get('/admin/my-calls/{type}', 'TaskController@adminMyCallsTask')->name('showAdminMyCalls');
+    Route::get('/admin/solicitacao/{id}', 'TaskController@adminTaskDetail')->name('adminTaskDetail');
+});

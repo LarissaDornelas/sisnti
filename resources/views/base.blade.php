@@ -50,15 +50,15 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-      
+
           <li class="user user-menu">
             <a href="{{ route('logout') }}">
-              
-              <span class="hidden-xs"><i class="fa fa-sign-out"></i> Sair</span> 
+
+              <span class="hidden-xs"><i class="fa fa-sign-out"></i> Sair</span>
             </a>
 
               </li>
-             
+
         </ul>
       </div>
     </nav>
@@ -73,7 +73,7 @@
         @yield('sidebar')
         <li class="header">ÁREA DO USUÁRIO</li>
         <li {!! Route::is('showOpenTask') ? "class='active'" : '' !!}><a href="{{ route('showOpenTask') }}"><i class="fa fa-plus-square"></i><span>Abrir Chamado</span></a></li>
-        <li {!! Route::is('userTasks', 'taskDetail') ? "class='active'" : '' !!}><a href="{{ route('userTasks') }}"><i class="fa fa-list-alt"></i><span>Meus Chamados</span></a></li>
+        <li {!! Route::is('userTasks', 'taskDetail', 'userTasksFilter') ? "class='active'" : '' !!}><a href="{{ route('userTasks')}}"><i class="fa fa-list-alt"></i><span>Meus Chamados</span></a></li>
         <li {!! Route::is('showProfile') ? "class='active'" : '' !!}><a href="{{route('showProfile')}}"><i class="fa fa-user"></i><span>Perfil de Usuário</span></a></li>
         <li {!! Route::is('showInfo') ? "class='active'" : '' !!}><a href="{{route('showInfo')}}"><i class="fa fa-info-circle"></i> <span>Sobre</span></a></li>
       </ul>

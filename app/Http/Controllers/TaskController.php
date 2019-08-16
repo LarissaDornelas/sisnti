@@ -6,11 +6,13 @@ use \DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\TaskCategory;
+use App\Historic;
 use App\TaskLocal;
 use App\TaskStatus;
 use App\TaskPriority;
 use App\Task;
 use App\Admin;
+
 
 class TaskController extends Controller
 {
@@ -21,9 +23,12 @@ class TaskController extends Controller
 
     public function getOpenTask()
     {
-        
+
         $categories = TaskCategory::orderBy('id')->get();
         $places = TaskLocal::orderBy('id')->get();
+        if (session()->get('admin')[0]) {
+            return view('admin.adminOpenTask', ['categories' => $categories, 'places' => $places]);
+        }
         return view('task.openTask', ['categories' => $categories, 'places' => $places]);
     }
 
@@ -31,12 +36,12 @@ class TaskController extends Controller
     {
         $data = $request->all();
 
-        $internal = ($this->isAdmin() == true) ? 1 : 0;
+        $internal = (session()->get('admin')[0]) ? 1 : 0;
 
         $openingDate = new DateTime();
         $patrimony = null;
 
-        if(array_key_exists('patrimony', $data))
+        if (array_key_exists('patrimony', $data))
             $patrimony = $data['patrimony'];
 
         $task = Task::create([
@@ -52,56 +57,177 @@ class TaskController extends Controller
             'taskPriority_id' => 0
         ]);
 
+        Historic::create([
+            'task_id' => $task->id,
+            'date' => $openingDate,
+            'description' => 'Chamado aberto com sucesso!'
+        ]);
+
         return redirect()->route('userTasks');
     }
 
     public function allTask()
     {
-        
         $data = DB::table('task')
-                ->join('taskLocal', 'task.taskLocal_id', '=', 'taskLocal.id')
-                ->join('taskCategory', 'task.taskCategory_id', '=', 'taskCategory.id')
-                ->join('taskStatus', 'task.taskStatus_id', '=', 'taskStatus.id')
-                ->select('task.*', 'taskLocal.description as taskLocal', 'taskCategory.description as taskCategory', 'taskStatus.description as taskStatus')
-                ->where('client_id' ,'=',auth()->user()->id)
-                ->paginate(15);
-          
-            
-             
-        return view('task.userTasks', ['userTasks' => $data]);
+            ->join('taskLocal', 'task.taskLocal_id', '=', 'taskLocal.id')
+            ->join('taskCategory', 'task.taskCategory_id', '=', 'taskCategory.id')
+            ->join('taskStatus', 'task.taskStatus_id', '=', 'taskStatus.id')
+            ->select('task.*', 'taskLocal.description as taskLocal', 'taskCategory.description as taskCategory', 'taskStatus.description as taskStatus')
+            ->where('client_id', '=', auth()->user()->id)
+            ->paginate(15);
 
-        
+        if (session()->get('admin')[0]) {
+            return view('admin.adminUserTasks', ['userTasks' => $data]);
+        }
+
+        return view('user.userTasks', ['userTasks' => $data]);
     }
+    public function taskWithFilter($typeRequest)
+    {
+        $type = $this->typeOfFilter($typeRequest);
+
+        $data = DB::table('task')
+            ->join('taskLocal', 'task.taskLocal_id', '=', 'taskLocal.id')
+            ->join('taskCategory', 'task.taskCategory_id', '=', 'taskCategory.id')
+            ->join('taskStatus', 'task.taskStatus_id', '=', 'taskStatus.id')
+            ->select('task.*', 'taskLocal.description as taskLocal', 'taskCategory.description as taskCategory', 'taskStatus.description as taskStatus')
+            ->where([
+                ['client_id', '=', auth()->user()->id],
+                ['taskStatus.id', '=', $type]
+            ])
+            ->paginate(15);
+
+        if (session()->get('admin')[0]) {
+            return view('admin.adminUserTasks', ['userTasks' => $data]);
+        }
+        return view('user.userTasks', ['userTasks' => $data]);
+    }
+
     public function taskDetail($id)
     {
-         
-            $taskData = DB::table('task')
-                   ->join('user', 'task.client_id', '=', 'user.id')
-                   ->join('taskLocal', 'task.taskLocal_id', '=', 'taskLocal.id')
-                   ->join('taskCategory', 'task.taskCategory_id', '=', 'taskCategory.id')
-                   ->join('taskStatus', 'task.taskStatus_id', '=', 'taskStatus.id')
-                   ->select('task.*', 'taskLocal.description as taskLocal', 'taskCategory.description as taskCategory', 'taskStatus.description as taskStatus', 'user.name as name')
-                   ->where('task.id', '=', $id)->get();
-       
-            $taskData = $taskData[0];
 
-            if(!($taskData->client_id == auth()->user()->id))
-            {
-                if(!$this->isAdmin())
-                {
-                    $error = 'Acesso Negado';
+        $taskData = DB::table('task')
+            ->join('user', 'task.client_id', '=', 'user.id')
+            ->join('taskLocal', 'task.taskLocal_id', '=', 'taskLocal.id')
+            ->join('taskCategory', 'task.taskCategory_id', '=', 'taskCategory.id')
+            ->join('taskStatus', 'task.taskStatus_id', '=', 'taskStatus.id')
+            ->join('historic', 'historic.task_id', '=', 'task.id')
+            ->select(
+                'task.*',
+                'taskLocal.description as taskLocal',
+                'taskCategory.description as taskCategory',
+                'taskStatus.description as taskStatus',
+                'user.name as name',
+                'historic.date as historicDate',
+                'historic.description as historicDescription'
+            )
+            ->where('task.id', '=', $id)->get();
 
-                    return view('task.taskDetail', ['error'=>$error]);
-                }
-            }       
-        
-   
-        return view('task.taskDetail', ['taskData' => $taskData, 'error'=>null]);
+        if (sizeof($taskData) <= 0) {
+            abort(404);
+        }
+
+        $taskData = $taskData[0];
+
+        if (!($taskData->client_id == auth()->user()->id)) {
+            if (!session()->get('admin')[0]) {
+                abort(401);
+
+                return view('task.taskDetail', ['error' => $error]);
+            }
+        }
+
+        if (session()->get('admin')[0]) {
+            return view('admin.userTaskDetail', ['taskData' => $taskData, 'error' => null]);
+        }
+        return view('task.taskDetail', ['taskData' => $taskData, 'error' => null]);
     }
 
-    public function isAdmin()
+    public function adminTaskDetail($id)
     {
-        if (Admin::exists('cpf', auth()->user()->username)) return true;
-        return false;
+
+        $taskData = $this->taskDetailSearch($id);
+
+        if (sizeof($taskData) <= 0) {
+            abort(404);
+        }
+
+        $taskData = $taskData[0];
+
+        if (!($taskData->client_id == auth()->user()->id)) {
+            if (!session()->get('admin')[0]) {
+                abort(401);
+
+                return view('task.taskDetail', ['error' => $error]);
+            }
+        }
+
+        return view('admin.adminTaskDetail', ['taskData' => $taskData, 'error' => null]);
+    }
+
+
+    public function taskDetailSearch($id){
+       return
+       DB::table('task')
+        ->join('user', 'task.client_id', '=', 'user.id')
+        ->join('taskLocal', 'task.taskLocal_id', '=', 'taskLocal.id')
+        ->join('taskCategory', 'task.taskCategory_id', '=', 'taskCategory.id')
+        ->join('taskStatus', 'task.taskStatus_id', '=', 'taskStatus.id')
+        ->join('historic', 'historic.task_id', '=', 'task.id')
+        ->select(
+            'task.*',
+            'taskLocal.description as taskLocal',
+            'taskCategory.description as taskCategory',
+            'taskStatus.description as taskStatus',
+            'user.name as name',
+            'historic.date as historicDate',
+            'historic.description as historicDescription'
+        )
+        ->where('task.id', '=', $id)->get();
+    }
+
+    public function adminGeneralTask($typeRequest)
+    {
+        $type = $this->typeOfFilter($typeRequest);
+
+        $title = str_replace('-', ' ', $typeRequest);
+        $title = mb_convert_case($title, MB_CASE_TITLE, "UTF-8");
+
+        $taskData = DB::table('task')
+            ->join('taskLocal', 'task.taskLocal_id', '=', 'taskLocal.id')
+            ->join('taskCategory', 'task.taskCategory_id', '=', 'taskCategory.id')
+            ->join('taskStatus', 'task.taskStatus_id', '=', 'taskStatus.id')
+            ->select('task.*', 'taskLocal.description as taskLocal', 'taskCategory.description as taskCategory', 'taskStatus.description as taskStatus')
+            ->where('taskStatus.id', '=', $type)
+            ->paginate(15);
+
+        return view('admin.adminGeneralTasks', ['userTasks' => $taskData, 'title' => $title]);
+    }
+    public function adminMyCallsTask($type)
+    {
+        echo "teste";
+    }
+
+    public function typeOfFilter($typeRequest)
+    {
+
+        switch ($typeRequest) {
+            case 'em-espera':
+                $type = 4;
+                break;
+            case 'concluido':
+                $type = 5;
+                break;
+            case 'aguardando-atendimento':
+                $type = 2;
+                break;
+            case 'em-atendimento':
+                $type = 3;
+                break;
+            case 'em-aberto':
+                $type = 1;
+                break;
+        }
+        return $type;
     }
 }

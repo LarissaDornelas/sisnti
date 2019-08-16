@@ -2,7 +2,7 @@
 Dashboard
 @stop
 @extends('base')
-@extends('sidebarAdmin')
+@extends('admin/sidebarAdmin')
 @section('content')
 Hello
 @stop

@@ -20,7 +20,7 @@ class CreateTaskTable extends Migration {
 			$table->dateTime('finishDate')->nullable();
 			$table->text('description', 65535);
 			$table->text('note', 65535)->nullable();
-			$table->string('patrimony', 45)->default('SEM REGISTRO');
+			$table->string('patrimony', 45)->nullable();
 			$table->text('solution', 65535)->nullable();
 			$table->boolean('internal');
 			$table->integer('taskPriority_id')->unsigned()->nullable()->index('fk_id_prioridade');

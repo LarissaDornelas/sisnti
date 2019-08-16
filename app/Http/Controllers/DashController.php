@@ -20,8 +20,8 @@ class DashController extends Controller
 
     public function showDash()
     {
-        if (Admin::exists('cpf', auth()->user()->username)) {
-            return view('adminDash');
+        if (Admin::where('adminCpf', auth()->user()->username)->exists()) {
+            return view('admin/adminDash');
         }
 
         $allTask = Task::all()->where('client_id', '=', auth()->user()->id);

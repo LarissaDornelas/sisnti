@@ -5,6 +5,7 @@ Perfil de Usuario
 <link rel="stylesheet" href="{{ asset('assets/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
 @stop
 @extends('base')
+@yield('isAdmin')
 @section('content')
 <section class="content-header">
   <h1>
@@ -22,27 +23,27 @@ Perfil de Usuario
             <div class="col-md-12">
               <table class="table table-hover table-striped table-bordered">
                 <tr>
-                  <th class="text-center" scope="col"><i class="fa fa-user margin-r-5"></i></th>
+                  <th title="Nome" class="text-center" scope="col"><i class="fa fa-user margin-r-5"></i></th>
                   <td>{{$userData->name}}</td>
                 </tr>
                 <tr>
-                  <th class="text-center" scope="col"><i class="fa fa-phone margin-r-5"></i></th>
+                  <th title="Telefone" class="text-center" scope="col"><i class="fa fa-phone margin-r-5"></i></th>
                   <td>{{$userData->phone}}</td>
                 </tr>
                 <tr>
-                  <th class="text-center" scope="col"><i class="fa fa-envelope margin-r-5"></i></th>
+                  <th title="Email" class="text-center" scope="col"><i class="fa fa-envelope margin-r-5"></i></th>
                   <td>{{$userData->email}}</td>
                 </tr>
                 <tr>
-                  <th class="text-center" scope="col"><i class="fa fa-file-text margin-r-5"></th>
+                  <th title="Cpf" class="text-center" scope="col"><i class="fa fa-file-text margin-r-5"></th>
                   <td>{{$userData->username}}</td>
                 </tr>
-  
+
               </table>
             </div>
-            
+
           </div>
-      
+
     <div class="box-footer">
       <p class="font-weight-bold">Dados de usuário são importados da MinhaUFOP, para alteração acesse o <a
           href="https://zeppelin10.ufop.br/minhaUfop/desktop/login.xhtml">link</a></p>

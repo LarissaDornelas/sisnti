@@ -20,6 +20,7 @@ use App\Admin;
 
 
 use GuzzleHttp\Client;
+use Psy\Exception\ErrorException;
 
 class AuthController extends Controller
 {
@@ -41,8 +42,8 @@ class AuthController extends Controller
      *
      * @var string
      */
-     protected $redirectTo = '/dashboard';
-     protected $redirectAfterLogout='/login';
+    protected $redirectTo = '/dashboard';
+    protected $redirectAfterLogout = '/login';
 
     /**
      * Create a new controller instance.
@@ -51,7 +52,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-       $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout');
     }
 
     public function showLogin()
@@ -63,17 +64,17 @@ class AuthController extends Controller
     {
         $data = $request->all();
 
-        $caracteres=[".","-"];
-        $data["username"] = str_replace($caracteres,'',$data["username"]);
-    
+        $caracteres = [".", "-"];
+        $data["username"] = str_replace($caracteres, '', $data["username"]);
 
-        $client = new Client(['verify'=>false]);
-        
+
+        $client = new Client(['verify' => false]);
+
         $requestBody['user'] = $data["username"];
         $requestBody['password'] = $data["password"];
-        $requestBody['attributes'] = ["cpf","nomecompleto","telefones","email"];
+        $requestBody['attributes'] = ["cpf", "nomecompleto", "telefones", "email"];
 
-        try{
+        try {
             $response = $client->request(config('ldapi.requestMethod'), config('ldapi.authUrl'), [
                 "auth" => [config('ldapi.user'), config('ldapi.password'), "Basic"],
                 "body" => json_encode($requestBody),
@@ -81,46 +82,52 @@ class AuthController extends Controller
                     "Content-type" => "application/json",
                 ],
             ]);
-            } 
-        catch(ClientException $ex)
-            {
-                $credentials["username"] = $data["username"];
-                $credentials["password"] = $data["password"];
-                event(new LoginFailed($credentials));
-                return back()->withErrors(['credentials' => $ex->getResponse()->getBody()->getContents()]);
-             }
-        catch (RequestException $ex)
-             {
-                 event(new LoginErrorEvent($ex->getMessage()));
-                 return back()->withErrors(['server' => $ex->getResponse()->getBody()->getContents()]);
-             }
 
-             
-    $user = User::where('cpf', $data['username'])->first();
-        
-    if(is_null($user))
-    {
-        $attributes= json_decode($response->getBody()->getContents());
+        } catch (ClientException $ex) {
+            $credentials["username"] = $data["username"];
+            $credentials["password"] = $data["password"];
 
-         $user = User::create([
+            event(new LoginFailed($credentials));
+            return back()->withErrors(['credentials' => $ex->getResponse()->getBody()->getContents()]);
+        } catch (RequestException $ex) {
+            event(new LoginErrorEvent($ex->getMessage()));
+            return back()->withErrors(['server' => $ex->getResponse()->getBody()->getContents()]);
+        }
+            $test = $response->getBody()->getContents();
+
+        // if(empty($test)){
+
+        //     $credentials["username"] = $data["username"];
+        //     $credentials["password"] = $data["password"];
+
+        //     event(new LoginFailed($credentials));
+        //     return back()->withErrors(['credentials' => "Invalid credentials"]);
+        // };
+
+
+        $user = User::where('cpf', $data['username'])->first();
+
+        if (is_null($user)) {
+
+            $attributes = json_decode($response->getBody()->getContents());
+
+
+            $user = User::create([
                 'username' => $attributes->cpf,
-                'name'=>ucwords(strtolower($attributes->nomecompleto)),
-                'email'=> $attributes->email,
-                'cpf'=>$attributes->cpf,
-                'phone'=>$attributes->telefones,
+                'name' => ucwords(strtolower($attributes->nomecompleto)),
+                'email' => $attributes->email,
+                'cpf' => $attributes->cpf,
+                'phone' => $attributes->telefones,
 
-         ]);
-           
+            ]);
+
+        }
+
+
+        Auth::login($user);
+        $request->session()->put('admin', [
+            (Admin::where('adminCpf', auth()->user()->username)->exists()) ? true : false
+        ]);
+        return redirect()->route('dashboard');
     }
-
-    
-    Auth::login($user);
-    
-    return redirect()->route('dashboard');
-}         
-
-
-
-
-
 }

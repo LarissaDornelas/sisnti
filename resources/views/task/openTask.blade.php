@@ -2,8 +2,8 @@
 Novo Chamado
 @stop
 @extends('base')
+@yield('isAdmin')
 @section('content')
-
 <section class="content-header">
   <h1>
     Novo Chamado
@@ -81,7 +81,7 @@ Novo Chamado
           <div class="col-md-6">
             <div class="form-group">
               <label>Descrição</label>
-              <textarea name="description" class="form-control"
+              <textarea Maxlength="255" name="description" class="form-control"
                 placeholder="Escreva uma breve descrição do problema ocorrido." rows="3" required></textarea>
             </div>
           </div>
@@ -112,7 +112,7 @@ Novo Chamado
           <div class="col-md-8">
             <div class="form-group">
               <label>Observações</label>
-              <textarea name="notes" class="form-control" placeholder="Observações quanto ao problema ocorrido."
+              <textarea Maxlength="255" name="notes" class="form-control" placeholder="Observações quanto ao problema ocorrido."
                 required rows="3"></textarea>
             </div>
           </div>

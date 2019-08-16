@@ -2,10 +2,11 @@
 Detalhes do Chamado
 @stop
 @extends('base')
+@yield('isAdmin')
 @section('content')
 
 
-@if($error == 'Acesso Negado')
+@if($error )
 <div class="alert alert-danger show" role="alert">
   This is a danger alert—check it out!
 </div>
@@ -39,20 +40,25 @@ Detalhes do Chamado
           <div class="col-md-6">
             <table class="table table-hover table-striped table-bordered">
               <tr>
-                <th class="text-center" scope="col"><i class="fa fa-calendar margin-r-5"></i></th>
-                <td>{{date( 'd-m-Y H:i:s' , strtotime($taskData->openingDate))}}</td>
+                <th title="Data de Abertura" class="text-center" scope="col"><i class="fa fa-calendar margin-r-5"></i></th>
+                <td class="tamFixed">{{date( 'd-m-Y H:i:s' , strtotime($taskData->openingDate))}}</td>
               </tr>
               <tr>
-                <th class="text-center" scope="col"><i class="fa fa-user margin-r-5"></i></th>
-                <td>{{$taskData->name}}</td>
+                <th title="Solicitante"  class="text-center" scope="col"><i class="fa fa-user margin-r-5"></i></th>
+                <td class="tamFixed">{{$taskData->name}}</td>
               </tr>
               <tr>
-                <th class="text-center" scope="col"><i class="fa fa-file-text margin-r-5"></i></th>
-                <td>{{$taskData->patrimony}}</td>
+                <th title="Patrimônio" class="text-center" scope="col"><i class="fa fa-file-text margin-r-5"></i></th>
+                <td class="tamFixed">
+                 @if($taskData->patrimony == null)
+                  Não definido
+                 @else
+                 {{$taskData->patrimony}}
+                 @endif</td>
               </tr>
               <tr>
-                <th class="text-center" scope="col"><i class="fa fa-location-arrow margin-r-5"></th>
-                <td>{{$taskData->taskLocal}}</td>
+                <th title="Local do Problema"  class="text-center" scope="col"><i class="fa fa-location-arrow margin-r-5"></th>
+                <td class="tamFixed">{{$taskData->taskLocal}}</td>
               </tr>
 
             </table>
@@ -63,18 +69,18 @@ Detalhes do Chamado
                 <th class="bg-secondary"><strong><i class="fa  fa-commenting margin-r-5"></i> Descrição</strong></th>
               </tr>
               <tr>
-                 <td> {{$taskData->description}}</td>                
+                 <td> {{$taskData->description}}</td>
               </tr>
               <tr>
                 <th class="bg-secondary"><strong><i class="fa fa-sticky-note margin-r-5"></i> Observações</strong></th>
               </tr>
               <tr>
-                  <td> {{$taskData->note}}</td>                
+                  <td> {{$taskData->note}}</td>
                </tr>
             </table>
           </div>
         </div>
-       
+
   </div>
   </div>
   </div>
@@ -91,12 +97,12 @@ Detalhes do Chamado
             <div class="col-md-6">
               <table class="table table-hover table-striped table-bordered">
                 <tr>
-                  <th class="text-center" scope="col"><i class="fa fa-spinner margin-r-5"></i></th>
-                  <td>{{$taskData->taskStatus}}</td>
+                  <th title="Status" class="text-center" scope="col"><i class="fa fa-spinner margin-r-5"></i></th>
+                  <td class="tamFixed">{{$taskData->taskStatus}}</td>
                 </tr>
                 <tr>
-                  <th class="text-center" scope="col"><i class="fa fa-calendar margin-r-5"></i></th>
-                  <td>
+                  <th title="Previsão de Atendimento" class="text-center" scope="col"><i class="fa fa-calendar margin-r-5"></i></th>
+                  <td class="tamFixed">
                       @if($taskData->forecastService == null)
                       Não definido
                       @else
@@ -105,8 +111,8 @@ Detalhes do Chamado
                   </td>
                 </tr>
                 <tr>
-                  <th class="text-center" scope="col"><i class="fa fa-check margin-r-5"></i></th>
-                  <td>
+                  <th title="Solução" class="text-center" scope="col"><i class="fa fa-check margin-r-5"></i></th>
+                  <td class="tamFixed">
                       @if($taskData->solution == null)
                       Não definido
                      @else
@@ -114,18 +120,45 @@ Detalhes do Chamado
                      @endif
                   </td>
                 </tr>
-                {{-- <tr>
-                  <th class="text-center" scope="col"><i class="fa fa-location-arrow margin-r-5"></th>
-                  <td>{{$taskData->taskLocal}}</td>
-                </tr> --}}
-  
+                <tr>
+                  <th title="Responsável" class="text-center" scope="col"><i class="fa  fa-user margin-r-5"></th>
+                  <td class="tamFixed">
+                     @if($taskData->manager_id == null)
+                      Não definido
+                     @else
+                     {{$taskData->manager_id}}
+                     @endif</td>
+                </tr>
+
               </table>
             </div>
+            <div class="col-md-6">
+                <table class="table table-hover table-striped table-bordered">
+                  <tr>
+                    <th colspan="2" class="text-center">Histórico</th>
+                  </tr>
+                  <tr>
+                    <th scope="col">Data/Hora</th>
+                    <th scope="col">Descrição</th>
+                  </tr>
+                  <tr>
+                    <td>
+                        {{date( 'd-m-Y H:i:s' , strtotime($taskData->historicDate))}}
+                    </td>
+                    <td>
+                        {{$taskData->historicDescription}}
+                    </td>
+                  </tr>
+
+                </table>
+              </div>
           </div>
-         
+
     </div>
     </div>
+
     </div>
+    @yield('adminTaskDetail')
 
 </section>
 @endif
