@@ -82,7 +82,6 @@ class AuthController extends Controller
                     "Content-type" => "application/json",
                 ],
             ]);
-
         } catch (ClientException $ex) {
             $credentials["username"] = $data["username"];
             $credentials["password"] = $data["password"];
@@ -93,7 +92,7 @@ class AuthController extends Controller
             event(new LoginErrorEvent($ex->getMessage()));
             return back()->withErrors(['server' => $ex->getResponse()->getBody()->getContents()]);
         }
-            $test = $response->getBody()->getContents();
+        $attributes = json_decode($response->getBody()->getContents());
 
         // if(empty($test)){
 
@@ -109,7 +108,7 @@ class AuthController extends Controller
 
         if (is_null($user)) {
 
-            $attributes = json_decode($response->getBody()->getContents());
+
 
 
             $user = User::create([
@@ -120,7 +119,6 @@ class AuthController extends Controller
                 'phone' => $attributes->telefones,
 
             ]);
-
         }
 
 

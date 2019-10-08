@@ -26,36 +26,32 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <table id="example2" class="table table-bordered table-hover dataTable" role="grid"
-                            aria-describedby="example2_info">
+                        <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
                             <thead>
                                 <tr role="row">
-                                    <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1"
-                                        colspan="1" aria-sort="ascending"
-                                        aria-label="Rendering engine: activate to sort column descending">Abertura</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
-                                        aria-label="Browser: activate to sort column ascending">Descrição</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
-                                        aria-label="Platform(s): activate to sort column ascending">Observações</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
-                                        aria-label="Engine version: activate to sort column ascending">Local</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
-                                        aria-label="CSS grade: activate to sort column ascending">Categoria</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
-                                        aria-label="CSS grade: activate to sort column ascending">Status</th>
+                                    <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">Abertura</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Descrição</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Observações</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">Local</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">Categoria</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">Status</th>
 
-                                 </tr>
+                                </tr>
                             </thead>
                             <tbody>
 
-                             @foreach($userTasks as $userTask)
+                                @foreach($userTasks as $userTask)
                                 <tr>
                                     <td>{{ date( 'd-m-Y H:i:s' , strtotime($userTask->openingDate)) }}</td>
-                                    <td><div class="b">{{ $userTask->description }}</td>
-                                    <td><div class="b">{{ $userTask->note }}</td>
+                                    <td>
+                                        <div class="b">{{ $userTask->description }}
+                                    </td>
+                                    <td>
+                                        <div class="b">{{ $userTask->note }}
+                                    </td>
                                     <td>{{ $userTask->taskLocal}}</td>
                                     <td>{{ $userTask->taskCategory}}</td>
-                                    <td><small class= "label
+                                    <td><small class="label
                                     @switch($userTask->taskStatus)
                                         @case('Em Aberto')
                                          bg-blue-ufop
@@ -69,19 +65,20 @@
                                         @case('Em Espera')
                                          label bg-red-ufop
                                         @break
-                                        @case('Concluído')
+                                        @case('Concluído com Sucesso')
+                                         bg-green-ufop
+                                        @break
+                                        @case('Concluído com Restrição')
+                                         bg-green-ufop
+                                        @break
+                                        @case('Concluído com Duplicata')
                                          bg-green-ufop
                                         @break
                                     @endswitch
                                      ">{{ $userTask->taskStatus }}</small></td>
 
                                     <td>
-                                        <a id= "see-details-ufop"
-                                        @if(Route::is('userTasks'))
-                                        href="{{route('taskDetail', ['id' => $userTask->id])}}"
-                                        @elseif(Route::is('showAdminGeneral'))
-                                        href="{{route('adminTaskDetail', ['id' => $userTask->id])}}"
-                                        @endif><span class="fa fa-eye"></span></a></td>
+                                        <a id="see-details-ufop" @if(Route::is('userTasks')) href="{{route('taskDetail', ['id' => $userTask->id])}}" @elseif(Route::is('showAdminGeneral'|| 'showAdminMyCalls' )) href="{{route('adminTaskDetail', ['id' => $userTask->id])}}" @endif><span class="fa fa-eye"></span></a></td>
                                 </tr>
 
                                 @endforeach
@@ -101,12 +98,11 @@
 <script src="{{ asset('assets/js/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/js/datatables.net-bs/js/jquery.dataTables.min.js') }}"></script>
 <script>
-    $(function () {
+    $(function() {
         $('#example2').DataTable({
             'paging': false,
             'lengthChange': false,
-            'searching': true
-            'ordering': true,
+            'searching': true 'ordering': true,
             'info': false,
             'autoWidth': false
         })

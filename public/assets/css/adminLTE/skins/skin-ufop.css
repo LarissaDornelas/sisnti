@@ -172,6 +172,13 @@
   color: white;
 }
 
+.bg-green-ufop{
+  background: green;
+}
+
+.bg-red-ufop {
+  background: red;
+}
 .align-form{
   margin-top: 32px;
 }
